@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#141414"/>
+  <defs>
+    <linearGradient id="sangre" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#d32f2f"/>
+      <stop offset="100%" stop-color="#6b0000"/>
+    </linearGradient>
+  </defs>
+  <path
+    fill="url(#sangre)"
+    d="M256 48 C220 200 140 260 140 340a116 116 0 0 0 232 0c0-80-80-140-116-292z"
+  />
+</svg>

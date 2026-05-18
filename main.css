@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Iceberg&family=Jim+Nightshade&display=swap");
+
 :root {
   --bg: #e8e8e8;
   --fg: #111111;
@@ -6,9 +8,12 @@
   --panel-bg: #ffffff;
   --panel-fg: #0d0d0d;
   --panel-muted: #3d3d3d;
+  --ink: #8b0000;
   --scroll-progress: 0;
+  --font-titulo: "Jim Nightshade", cursive;
+  --font-texto: "Iceberg", sans-serif;
 
-  font-family: "Literata", Georgia, serif;
+  font-family: var(--font-texto);
   line-height: 1.75;
   color: var(--fg);
   background-color: var(--bg);
@@ -158,7 +163,7 @@ main {
 
 .ink-source h2,
 .ink-source h1 {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-titulo);
   color: var(--panel-fg);
   margin: 0;
 }
@@ -167,6 +172,7 @@ main {
 .texto-panel {
   position: relative;
   z-index: 4;
+  font-family: var(--font-texto);
   background: var(--panel-bg);
   color: var(--panel-fg);
   padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.75rem);
@@ -187,8 +193,7 @@ main {
   text-align: center;
   max-width: 36rem;
   margin: 0 auto 2rem;
-  font-family: system-ui, sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   line-height: 1.7;
   color: var(--panel-fg);
 }
@@ -211,7 +216,7 @@ main {
   margin: 1.75rem 0;
   padding: 0.75rem 0 0.75rem 1.25rem;
   border-left: 3px solid var(--panel-fg);
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-texto);
   font-size: 1.3rem;
   font-style: italic;
   color: var(--panel-fg);
@@ -239,6 +244,7 @@ main {
 }
 
 .hero h1 {
+  font-family: var(--font-titulo);
   font-size: clamp(2.75rem, 9vw, 5.5rem);
   font-weight: 400;
   line-height: 1.05;
@@ -328,13 +334,14 @@ main {
 }
 
 .texto-header h2 {
+  font-family: var(--font-titulo);
   font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 600;
   line-height: 1.15;
 }
 
 .drop-cap::first-letter {
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-titulo);
   font-size: 4.25rem;
   float: left;
   line-height: 0.78;
@@ -411,37 +418,6 @@ main {
   color: var(--panel-bg);
 }
 
-/* Goteo decorativo CSS bajo títulos (refuerzo visual) */
-.ink-source::after {
-  content: "";
-  position: absolute;
-  left: 10%;
-  bottom: -4px;
-  width: 3px;
-  height: 0;
-  background: var(--panel-fg);
-  border-radius: 0 0 3px 3px;
-  opacity: 0;
-  animation: ink-trail 3s ease-in-out infinite;
-}
-
-@keyframes ink-trail {
-  0%,
-  70%,
-  100% {
-    height: 0;
-    opacity: 0;
-  }
-  75% {
-    height: 28px;
-    opacity: 0.7;
-  }
-  90% {
-    height: 52px;
-    opacity: 0.2;
-  }
-}
-
 @media (max-width: 768px) {
   .nav-labels {
     display: none;
@@ -469,11 +445,6 @@ main {
   .nav-dot,
   .nav-label,
   .scroll-line,
-  .ink-source::after {
-    transition: none;
-    animation: none;
-  }
-
   .ink-canvas {
     display: none;
   }

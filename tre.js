@@ -1,9 +1,4 @@
 import "./main.css";
-import "@fontsource/cormorant-garamond/400.css";
-import "@fontsource/cormorant-garamond/400-italic.css";
-import "@fontsource/cormorant-garamond/600.css";
-import "@fontsource/literata/400.css";
-import "@fontsource/literata/500.css";
 import { InkScene } from "./ink-scene.js";
 
 const sections = document.querySelectorAll(".section");
@@ -13,7 +8,6 @@ const scenes = document.querySelectorAll(".texto-scene");
 const root = document.documentElement;
 
 const inkScene = new InkScene();
-document.querySelectorAll(".ink-source").forEach((el) => inkScene.registerSource(el));
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
@@ -38,6 +32,11 @@ function updateScrollColors() {
   root.style.setProperty("--panel-muted", `rgb(${panelMuted}, ${panelMuted}, ${panelMuted})`);
   root.style.setProperty("--fg", `rgb(${panelFg}, ${panelFg}, ${panelFg})`);
   root.style.setProperty("--muted", `rgb(${panelMuted}, ${panelMuted}, ${panelMuted})`);
+
+  const inkR = Math.round(lerp(139, 210, progress));
+  const inkG = Math.round(lerp(8, 35, progress));
+  const inkB = Math.round(lerp(8, 35, progress));
+  root.style.setProperty("--ink", `rgb(${inkR}, ${inkG}, ${inkB})`);
 
   inkScene.setScrollProgress(progress);
 }

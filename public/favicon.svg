@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="sangre" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#c62828"/>
+      <stop offset="100%" stop-color="#6b0000"/>
+    </linearGradient>
+  </defs>
+  <path
+    fill="url(#sangre)"
+    d="M50 6 C44 32 28 46 28 62a22 22 0 0 0 44 0c0-16-16-30-22-56z"
+  />
+</svg>
