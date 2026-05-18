@@ -6,18 +6,25 @@
     <title>Textos de Fantasía</title>
     <meta name="description" content="Textos de fantasía — Retórica, cuento sin contar" />
     <meta name="theme-color" content="#8b0000" />
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='72' font-size='72' text-anchor='middle'%3E%F0%9F%A9%B8%3C/text%3E%3C/svg%3E"
-    />
-    <link rel="apple-touch-icon" href="./miniatura.svg" />
-    <meta property="og:title" content="Textos de Fantasía" />
-    <meta property="og:description" content="Textos de fantasía — Retórica, cuento sin contar" />
-    <meta property="og:image" content="./miniatura.svg" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="./favicon-192.png" sizes="192x192" />
+    <meta property="og:title" content="Textos y Transmedia" />
+    <meta property="og:description" content="Textos de recuerdos — Retórica, cuento sin contar" />
+    <meta property="og:image" content="./miniatura.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:image" content="./miniatura.svg" />
+    <meta name="twitter:image" content="./miniatura.png" />
+    <script>
+      (function () {
+        var img = new URL("./miniatura.png", location.href).href;
+        document.querySelector('meta[property="og:image"]')?.setAttribute("content", img);
+        document.querySelector('meta[name="twitter:image"]')?.setAttribute("content", img);
+      })();
+    </script>
   </head>
   <body>
     <div class="progress-bar" aria-hidden="true"></div>
@@ -29,6 +36,9 @@
       <a href="#texto-3" class="nav-dot" data-section="texto-3" aria-label="Texto 3"></a>
       <a href="#texto-4" class="nav-dot" data-section="texto-4" aria-label="Texto 4"></a>
       <a href="#texto-5" class="nav-dot" data-section="texto-5" aria-label="Texto 5"></a>
+      <a href="#texto-6" class="nav-dot" data-section="texto-6" aria-label="Texto 6"></a>
+      <a href="#texto-7" class="nav-dot" data-section="texto-7" aria-label="Texto 7"></a>
+      <a href="#texto-8" class="nav-dot" data-section="texto-8" aria-label="Texto 8"></a>
     </nav>
 
     <aside class="nav-labels" aria-hidden="true">
@@ -38,6 +48,9 @@
       <span class="nav-label" data-for="texto-3">Texto:3</span>
       <span class="nav-label" data-for="texto-4">Texto:4</span>
       <span class="nav-label" data-for="texto-5">Texto:5</span>
+      <span class="nav-label" data-for="texto-6">Texto:6</span>
+      <span class="nav-label" data-for="texto-7">Texto:7</span>
+      <span class="nav-label" data-for="texto-8">Texto:8</span>
     </aside>
 
     <main>
@@ -46,8 +59,7 @@
           <p class="eyebrow">Retórica · Cuento sin contar</p>
           <h1 class="ink-source">Textos de <em>Fantasía</em></h1>
           <p class="hero-desc texto-panel texto-panel--hero">
-            Cinco fragmentos narrativos donde lo imposible respira entre líneas.
-            Desplázate para atravesar la escala del blanco al negro.
+            Ocho fragmentos de mí. Recuerdos y sin más.
           </p>
           <button type="button" class="btn-scroll" aria-label="Ir al primer texto">
             <span>Explorar</span>
@@ -66,20 +78,24 @@
         <div class="texto-scene">
           <header class="texto-header ink-source">
             <span class="texto-num">Texto:1</span>
-            <h2>El umbral de la niebla</h2>
+            <h2>El marchitar de las flores</h2>
           </header>
           <article class="texto-body texto-panel">
             <p class="drop-cap">
-              Nadie recordaba cuándo el bosque dejó de pertenecer al mapa. Las aldeas
-              lo llamaban <em>el Umbral</em>, como si fuera una puerta y no un lugar.
-              Cuando la niebla descendía al anochecer, los caminos se doblaban sobre
-              sí mismos y las voces regresaban con un eco de otro idioma.
+              Los cuadros me abruman en la niebla, los pies me queman mientras los observo, no tengo a
+              donde más voltear, únicamente me queda seguir avanzando como si no me doliera, las
+              lágrimas del coraje me perforaban los ojos. Lo sé, fue mi culpa, por ello ya no me es
+              permitido emitir ningun sonido, solo me quedan las flores en los cuadros, una y otra vez,
+              incluso si ya me los sé de memoria. Podría huir pero en el fondo lo sé, las lágrimas
+              derramadas, nunca volverán, la niebla nunca se disipara y el arrepentimiento siempre
+              quedará en cada pincelada de aquel oléo. 
             </p>
             <p>
-              La protagonista —sin nombre en el manuscrito— caminaba con una linterna
-              que no iluminaba: solo revelaba lo que ya estaba allí, oculto a simple
-              vista. Era retórica de lo invisible: persuadir al lector de que la
-              oscuridad también argumenta.
+              Intentaría mirar al cielo, sin embargo, ya no me es permitido, sin nada más que cuadros, las
+              flores se van marchitando cuadro a cuadro, pero cuando están a punto de acabarse,
+              retrocedo para que vuelvan a florecer, deseando que algo diferente suceda. Si lo hace,
+              prometo dejar que las flores se mueran y descansen, tal como yo he deseado hacerlo desde
+              hace mucho tiempo, nuevamente se acabó el pasillo, y nuevamente, regreso al inicio.
             </p>
             <blockquote>
               «No temas lo que no ves; teme lo que el bosque te devuelve con tu propia voz.»
@@ -185,15 +201,93 @@
               velas escribieron solas en la pared lo que faltaba.
             </p>
             <p>
-              Nadie volvió a leerlo en voz alta. Pero se susurra que quien llega
-              hasta aquí —hasta el último texto, hasta el negro más profundo— ya ha
-              completado el cuento. La fantasía, al fin, es un pacto entre quien
-              escribe y quien permanece leyendo.
+              Nadie volvió a leerlo en voz alta. Pero se susurra que el manuscrito
+              aún respira en otras salas del monasterio, esperando manos que no
+              tengan miedo de seguir escribiendo en el margen.
             </p>
           </article>
           <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
           <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> apóstrofe al lector («continúa tú»). Cierre metanarrativo que cierra el arco de blanco a negro de toda la experiencia.</p>
+            <p><strong>Figura retórica:</strong> apóstrofe al lector («continúa tú»). El blanco del margen funciona como <em>paralipsis</em>: lo omitido convoca al lector a completar el argumento.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-6" class="section texto" data-index="6">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:6</span>
+            <h2>La ciudad que respira al revés</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              Allí el alba llegaba por los desagües y el ocaso subía por las chimeneas.
+              Los relojes marcaban el tiempo que faltaba, no el que pasaba. Los habitantes
+              aprendieron a saludar de espaldas: era la única forma de no mentir al decir
+              adiós.
+            </p>
+            <p>
+              Una cartógrafa trazó el mapa al contrario y descubrió que las calles formaban
+              una frase. La leyó en voz baja; la ciudad exhaló, satisfecha, y por un instante
+              el cielo quedó abajo y el mar arriba — como si la fantasía corrigiera la gravedad
+              del sentido común.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> hipérbole espacial y quiasmus (cielo abajo / mar arriba). La ciudad invertida es <em>topos</em> del mundo al revés que argumenta contra lo dado.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-7" class="section texto" data-index="7">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:7</span>
+            <h2>El mapa de las cicatrices</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              Cada guerra dejó una línea en el pergamino. No eran fronteras: eran memorias
+              que sangraban tinta roja oscura y se secaban en marrón. Los heraldos juraban
+              que el mapa latía cuando alguien mentía sobre la paz.
+            </p>
+            <p>
+              Una niña tocó la cicatriz más antigua y escuchó un nombre que no era el suyo.
+              Lo repitió; el mapa respondió con otra voz, más joven. Así entendió que las
+              heridas también narran, y que callarlas es borrar un capítulo entero del reino.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> prosopopeya del mapa y metonimia (cicatriz por batalla). El cuerpo del territorio persuade sin arenga: muestra la costura del dolor.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-8" class="section texto" data-index="8">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:8</span>
+            <h2>La última palabra del mundo</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              Decían que al final de todas las lenguas había una sola sílaba que aún no se
+              había pronunciado. Los profetas discutían su timbre; los músicos, su duración.
+              Solo una anciana afirmaba que ya la conocían los que callan antes de dormir.
+            </p>
+            <p>
+              Cuando por fin alguien la dijo, no hubo trueno ni silencio absoluto: solo el
+              murmullo de ocho cuentos encajando como piezas de un mismo reloj. Quien llega
+              hasta aquí —hasta el último texto, hasta el negro más profundo— ya ha
+              completado el cuento. La fantasía, al fin, es un pacto entre quien escribe
+              y quien permanece leyendo.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> epífora y cierre circular. La «última palabra» remite a los ocho textos como <em>dispositio</em> global del recorrido.</p>
           </div>
           <footer class="section-footer">
             <p>Fin del recorrido</p>
@@ -203,6 +297,6 @@
       </section>
     </main>
 
-    <script type="module" src="/tre.js"></script>
+    <script type="module" src="./tre.js"></script>
   </body>
 </html>
