@@ -1,4 +1,9 @@
 import "./main.css";
+import "@fontsource/cormorant-garamond/400.css";
+import "@fontsource/cormorant-garamond/400-italic.css";
+import "@fontsource/cormorant-garamond/600.css";
+import "@fontsource/literata/400.css";
+import "@fontsource/literata/500.css";
 import { InkScene } from "./ink-scene.js";
 
 const sections = document.querySelectorAll(".section");
