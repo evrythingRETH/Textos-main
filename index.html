@@ -3,10 +3,198 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Texto de Retórica</title>
+    <title>Textos de Fantasía</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Literata:opsz,wght@7..72,400;7..72,500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Texto de Retórica</h1>
+    <div class="progress-bar" aria-hidden="true"></div>
+
+    <nav class="nav-dots" aria-label="Navegación por textos">
+      <a href="#inicio" class="nav-dot active" data-section="inicio" aria-label="Inicio"></a>
+      <a href="#texto-1" class="nav-dot" data-section="texto-1" aria-label="Texto 1"></a>
+      <a href="#texto-2" class="nav-dot" data-section="texto-2" aria-label="Texto 2"></a>
+      <a href="#texto-3" class="nav-dot" data-section="texto-3" aria-label="Texto 3"></a>
+      <a href="#texto-4" class="nav-dot" data-section="texto-4" aria-label="Texto 4"></a>
+      <a href="#texto-5" class="nav-dot" data-section="texto-5" aria-label="Texto 5"></a>
+    </nav>
+
+    <aside class="nav-labels" aria-hidden="true">
+      <span class="nav-label active" data-for="inicio">Inicio</span>
+      <span class="nav-label" data-for="texto-1">Texto:1</span>
+      <span class="nav-label" data-for="texto-2">Texto:2</span>
+      <span class="nav-label" data-for="texto-3">Texto:3</span>
+      <span class="nav-label" data-for="texto-4">Texto:4</span>
+      <span class="nav-label" data-for="texto-5">Texto:5</span>
+    </aside>
+
+    <main>
+      <section id="inicio" class="section hero" data-index="0">
+        <div class="hero-content texto-scene">
+          <p class="eyebrow">Retórica · Cuento sin contar</p>
+          <h1 class="ink-source">Textos de <em>Fantasía</em></h1>
+          <p class="hero-desc texto-panel texto-panel--hero">
+            Cinco fragmentos narrativos donde lo imposible respira entre líneas.
+            Desplázate para atravesar la escala del blanco al negro.
+          </p>
+          <button type="button" class="btn-scroll" aria-label="Ir al primer texto">
+            <span>Explorar</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 4v12M10 16l-4-4M10 16l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="scroll-hint" aria-hidden="true">
+          <span>scroll</span>
+          <div class="scroll-line"></div>
+        </div>
+      </section>
+
+      <section id="texto-1" class="section texto" data-index="1">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:1</span>
+            <h2>El umbral de la niebla</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p class="drop-cap">
+              Nadie recordaba cuándo el bosque dejó de pertenecer al mapa. Las aldeas
+              lo llamaban <em>el Umbral</em>, como si fuera una puerta y no un lugar.
+              Cuando la niebla descendía al anochecer, los caminos se doblaban sobre
+              sí mismos y las voces regresaban con un eco de otro idioma.
+            </p>
+            <p>
+              La protagonista —sin nombre en el manuscrito— caminaba con una linterna
+              que no iluminaba: solo revelaba lo que ya estaba allí, oculto a simple
+              vista. Era retórica de lo invisible: persuadir al lector de que la
+              oscuridad también argumenta.
+            </p>
+            <blockquote>
+              «No temas lo que no ves; teme lo que el bosque te devuelve con tu propia voz.»
+            </blockquote>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> metáfora del umbral como argumento narrativo. La niebla funciona como <em>enthymeme</em> visual: el lector completa lo no dicho.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-2" class="section texto" data-index="2">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:2</span>
+            <h2>La biblioteca de los espejos</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              En la torre más alta de la ciudad flotante existía una sala circular
+              cuyas paredes eran espejos opacos. Cada libro reflejaba un final distinto
+              del mismo cuento. Los bibliotecarios juraban que los volúmenes no se
+              leían: se <strong>negociaban</strong> con ellos.
+            </p>
+            <p>
+              Un joven escriba llegó buscando la historia de su madre. El espejo le
+              mostró tres versiones: la heroína, la traidora, la que nunca partió.
+              Eligió la que dolía menos, y al cerrar el libro la torre tembló — como
+              si la fantasía protestara por ser domesticada.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> antítesis entre los tres finales. La elección del lector-personaje replica la <em>dispositio</em>: ordenar el relato según el dolor tolerable.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-3" class="section texto" data-index="3">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:3</span>
+            <h2>El dragón que olvidó su nombre</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              Dormía enrollado alrededor de una montaña de relojes detenidos. Los
+              campesinos dejaban ofrendas de palabras: poemas, juramentos, mentiras
+              piadosas. El dragón las absorbía y las devolvía transformadas en sueños.
+            </p>
+            <p>
+              Un caballero sin armadura subió a pedirle un favor. —¿Quién eres? —preguntó
+              la bestia. —No lo sé —respondió él—; me quitaron el nombre en la frontera
+              del reino. El dragón rió con un trueno suave: —Entonces somos iguales.
+              Nombrémonos juntos, y que el cuento decida si sobrevivimos.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> paralelismo entre caballero y dragón. La pérdida del nombre es <em>aporia</em> que abre el discurso fantástico hacia lo colaborativo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-4" class="section texto" data-index="4">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:4</span>
+            <h2>Las lunas de cristal</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              Aquel mundo tenía siete lunas, cada una de un tono de gris diferente.
+              Cuando todas se alineaban, el mar se volvía espejo y los barcos navegaban
+              hacia abajo, buscando el cielo que se había hundido.
+            </p>
+            <p>
+              La narradora contaba esto sin prisa, como quien cuenta un secreto que ya
+              no es suyo. Decía que la fantasía no inventa mundos: los recuerda. Y que
+              cada lector trae una luna que el texto no menciona, pero sin la cual la
+              historia se queda a medias.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> hipérbole (siete lunas) y personificación del mar. La paleta cromática del relato anticipa la escala visual de esta página.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="texto-5" class="section texto" data-index="5">
+        <div class="texto-scene">
+          <header class="texto-header ink-source">
+            <span class="texto-num">Texto:5</span>
+            <h2>El cuento que se niega a terminar</h2>
+          </header>
+          <article class="texto-body texto-panel">
+            <p>
+              Al final del manuscrito solo había una línea en blanco y un margen
+              anotado: «continúa tú». Los copistas del monasterio discutían si era
+              herejía o invitación. El abad ordenó cerrar el libro; esa noche, las
+              velas escribieron solas en la pared lo que faltaba.
+            </p>
+            <p>
+              Nadie volvió a leerlo en voz alta. Pero se susurra que quien llega
+              hasta aquí —hasta el último texto, hasta el negro más profundo— ya ha
+              completado el cuento. La fantasía, al fin, es un pacto entre quien
+              escribe y quien permanece leyendo.
+            </p>
+          </article>
+          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+          <div class="texto-nota texto-panel" hidden>
+            <p><strong>Figura retórica:</strong> apóstrofe al lector («continúa tú»). Cierre metanarrativo que cierra el arco de blanco a negro de toda la experiencia.</p>
+          </div>
+          <footer class="section-footer">
+            <p>Fin del recorrido</p>
+            <button type="button" class="btn-top" aria-label="Volver al inicio">↑ Inicio</button>
+          </footer>
+        </div>
+      </section>
+    </main>
+
     <script type="module" src="/tre.js"></script>
   </body>
 </html>
