@@ -44,12 +44,12 @@ const CARGA_FADE_MS = 1000;
 export const PUNTOS_RECORRIDO = [
   { id: "inicio", label: "Cartografía del recuerdo" },
   { id: "texto-2", label: "La infección no se detiene" },
-  { id: "texto-3", label: "El dragón que olvidó su nombre" },
-  { id: "texto-4", label: "Las lunas de cristal" },
-  { id: "texto-5", label: "El cuento que se niega a terminar" },
-  { id: "texto-6", label: "La ciudad que respira al revés" },
-  { id: "texto-7", label: "El mapa de las cicatrices" },
-  { id: "texto-8", label: "La última palabra del mundo" },
+  { id: "texto-3", label: "La Luna" },
+  { id: "texto-4", label: "Salvanos" },
+  { id: "texto-5", label: "La gota que se dividió" },
+  { id: "texto-6", label: "Mi primer dibujo" },
+  { id: "texto-7", label: "Realidad Robada" },
+  { id: "texto-8", label: "Mis dos lamentos" },
   { id: "texto-1", label: "El marchitar de las flores" },
 ];
 
