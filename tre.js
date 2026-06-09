@@ -47,6 +47,9 @@ const lecturaOverlay = document.getElementById("lectura-overlay");
 const lecturaTitulo = document.getElementById("lectura-titulo");
 const lecturaTerritorio = document.getElementById("lectura-territorio");
 const lecturaCuerpo = document.getElementById("lectura-cuerpo");
+const lecturaImagenes = document.getElementById("lectura-imagenes");
+const lecturaImagenesPanel = document.getElementById("lectura-imagenes-panel");
+const lecturaImagen = document.getElementById("lectura-imagen");
 const progresoTexto = document.getElementById("progreso-texto");
 const progresoBloque = document.querySelector(".carto-progreso");
 const btnCerrar = document.querySelector(".btn-cerrar");
@@ -56,6 +59,44 @@ const visitados = new Set();
 let activoId = null;
 let recorrido = null;
 let recorridoIniciado = false;
+
+/** Imagen asociada a cada fragmento (img1.jpg ↔ texto-1, etc.) */
+const IMAGENES_TEXTO = {
+  "texto-1": "./img/img1.jpg",
+  "texto-2": "./img/img2.jpg",
+  "texto-3": "./img/img3.jpg",
+  "texto-4": "./img/img4.jpg",
+  "texto-5": "./img/img5.jpg",
+  "texto-6": "./img/img6.jpg",
+  "texto-7": "./img/img7.jpg",
+  "texto-8": "./img/img8.jpg",
+};
+
+function montarImagenLectura(id, titulo) {
+  const ruta = IMAGENES_TEXTO[id];
+  if (!lecturaImagenes || !lecturaImagen) return;
+
+  if (!ruta) {
+    lecturaImagenes.hidden = true;
+    lecturaImagen.removeAttribute("src");
+    lecturaImagen.alt = "";
+    return;
+  }
+
+  lecturaImagen.src = ruta;
+  lecturaImagen.alt = titulo ? `Imagen — ${titulo}` : "Imagen del fragmento";
+  lecturaImagenes.hidden = false;
+  if (lecturaImagenesPanel) lecturaImagenesPanel.open = false;
+}
+
+function ocultarImagenLectura() {
+  if (lecturaImagenes) lecturaImagenes.hidden = true;
+  if (lecturaImagenesPanel) lecturaImagenesPanel.open = false;
+  if (lecturaImagen) {
+    lecturaImagen.removeAttribute("src");
+    lecturaImagen.alt = "";
+  }
+}
 
 function actualizarPaleta(progreso) {
   root.style.setProperty("--scroll-progress", progreso);
@@ -145,6 +186,7 @@ function abrirLectura(id) {
   lecturaTerritorio.textContent = meta.territorio;
 
   lecturaCuerpo.replaceChildren(contenido);
+  montarImagenLectura(id, meta.titulo);
   enlazarExpandir(lecturaCuerpo);
 
   marcarVisitado(id);
@@ -169,6 +211,7 @@ function cerrarLectura() {
   document.body.classList.remove("lectura-abierta");
 
   const cerrar = () => {
+    ocultarImagenLectura();
     if (lectura) {
       lectura.hidden = true;
       lectura.setAttribute("aria-hidden", "true");
