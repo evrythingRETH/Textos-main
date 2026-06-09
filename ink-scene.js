@@ -46,13 +46,13 @@ export class InkScene {
     this.scene.add(luz);
 
     this.matGota = new THREE.MeshStandardMaterial({
-      color: 0x6e0808,
+      color: 0x1a1a1a,
       metalness: 0.02,
       roughness: 0.38,
     });
 
     this.matFlujoBase = new THREE.MeshStandardMaterial({
-      color: 0x750909,
+      color: 0x222222,
       metalness: 0,
       roughness: 0.5,
       transparent: true,
@@ -61,7 +61,7 @@ export class InkScene {
     });
 
     this.matMancha = new THREE.MeshStandardMaterial({
-      color: 0x5a0000,
+      color: 0x0d0d0d,
       metalness: 0,
       roughness: 0.58,
       transparent: true,
@@ -133,12 +133,10 @@ export class InkScene {
   }
 
   setScrollProgress(progreso) {
-    const r = (100 + progreso * 100) / 255;
-    const g = (4 + progreso * 18) / 255;
-    const b = (4 + progreso * 18) / 255;
-    this.matGota.color.setRGB(r, g, b);
-    this.matFlujoBase.color.setRGB(r * 1.03, g * 0.95, b * 0.95);
-    this.matMancha.color.setRGB(r * 0.82, g * 0.75, b * 0.75);
+    const g = (0.08 + progreso * 0.78) / 1;
+    this.matGota.color.setRGB(g, g, g);
+    this.matFlujoBase.color.setRGB(g * 1.05, g * 1.05, g * 1.05);
+    this.matMancha.color.setRGB(g * 0.75, g * 0.75, g * 0.75);
   }
 
   redimensionar() {

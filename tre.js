@@ -1,127 +1,292 @@
 import "./main.css";
-import { InkScene } from "./ink-scene.js";
+import { Recorrido3D } from "./recorrido-3d.js";
 
-const sections = document.querySelectorAll(".section");
-const navDots = document.querySelectorAll(".nav-dot");
-const navLabels = document.querySelectorAll(".nav-label");
-const scenes = document.querySelectorAll(".texto-scene");
+/** Territorios por defecto si no pones data-territorio en el índice del HTML */
+const TERRITORIOS_FALLBACK = {
+  inicio: "Centro · Axis Mundi",
+  "texto-1": "NO · Regio Nebulae",
+  "texto-2": "Septentrión · Specula",
+  "texto-3": "Levante · Mons Horologii",
+  "texto-4": "Oriente · Mare Speculi",
+  "texto-5": "Austro · Margen Apertum",
+  "texto-6": "Mediodía · Urbs Inversa",
+  "texto-7": "Occidente · Chartae Vulnerum",
+  "texto-8": "Poniente · Ultima Syllaba",
+};
+
+/** Lee títulos y territorios desde los botones del índice en index.html */
+function metaDesdeIndice(id) {
+  const btn = document.querySelector(`.indice-item[data-id="${id}"]`);
+  if (!btn) {
+    return { titulo: id, territorio: TERRITORIOS_FALLBACK[id] ?? "" };
+  }
+  return {
+    titulo: (btn.dataset.titulo || btn.textContent).trim(),
+    territorio: (btn.dataset.territorio || TERRITORIOS_FALLBACK[id] || "").trim(),
+  };
+}
+
 const root = document.documentElement;
 
-const inkScene = new InkScene();
+const paginaInicio = document.getElementById("pagina-inicio");
+const inicioSplash = document.getElementById("inicio-splash");
+const inicioContenido = document.getElementById("inicio-contenido-principal");
+const btnIniciarRecorrido = document.getElementById("btn-iniciar-recorrido");
+const umbralTexto = document.getElementById("inicio-umbral-texto");
+const uiCapas = document.querySelector(".ui-capas");
+const contenedor3d = document.getElementById("recorrido-3d");
+const mapaPanel = document.getElementById("mapa-panel");
+const mapaToggle = document.getElementById("mapa-toggle");
+const mapaToggleLabel = mapaToggle?.querySelector(".mapa-toggle-label");
+const indiceItems = document.querySelectorAll(".indice-item");
 
-function lerp(a, b, t) {
-  return a + (b - a) * t;
+const PUNTOS_IDS = [...indiceItems].map((btn) => btn.dataset.id).filter(Boolean);
+const TOTAL_PUNTOS = PUNTOS_IDS.length;
+const lectura = document.getElementById("lectura");
+const lecturaOverlay = document.getElementById("lectura-overlay");
+const lecturaTitulo = document.getElementById("lectura-titulo");
+const lecturaTerritorio = document.getElementById("lectura-territorio");
+const lecturaCuerpo = document.getElementById("lectura-cuerpo");
+const progresoTexto = document.getElementById("progreso-texto");
+const progresoBloque = document.querySelector(".carto-progreso");
+const btnCerrar = document.querySelector(".btn-cerrar");
+const hintRecorrido = document.getElementById("hint-recorrido");
+
+const visitados = new Set();
+let activoId = null;
+let recorrido = null;
+let recorridoIniciado = false;
+
+function actualizarPaleta(progreso) {
+  root.style.setProperty("--scroll-progress", progreso);
 }
 
-function updateScrollColors() {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
-
-  root.style.setProperty("--scroll-progress", progress);
-
-  const bg = Math.round(lerp(232, 18, progress));
-  root.style.setProperty("--bg", `rgb(${bg}, ${bg}, ${bg})`);
-
-  const panelBg = Math.round(lerp(255, 22, progress));
-  const panelFg = Math.round(lerp(13, 245, progress));
-  const panelMuted = Math.round(lerp(61, 170, progress));
-
-  root.style.setProperty("--panel-bg", `rgb(${panelBg}, ${panelBg}, ${panelBg})`);
-  root.style.setProperty("--panel-fg", `rgb(${panelFg}, ${panelFg}, ${panelFg})`);
-  root.style.setProperty("--panel-muted", `rgb(${panelMuted}, ${panelMuted}, ${panelMuted})`);
-  root.style.setProperty("--fg", `rgb(${panelFg}, ${panelFg}, ${panelFg})`);
-  root.style.setProperty("--muted", `rgb(${panelMuted}, ${panelMuted}, ${panelMuted})`);
-
-  const inkR = Math.round(lerp(139, 210, progress));
-  const inkG = Math.round(lerp(8, 35, progress));
-  const inkB = Math.round(lerp(8, 35, progress));
-  root.style.setProperty("--ink", `rgb(${inkR}, ${inkG}, ${inkB})`);
-
-  inkScene.setScrollProgress(progress);
+function contarVisitados() {
+  return PUNTOS_IDS.filter((id) => visitados.has(id)).length;
 }
 
-function updateSceneTilt() {
-  scenes.forEach((scene) => {
-    const rect = scene.getBoundingClientRect();
-    const center = rect.top + rect.height / 2;
-    const viewCenter = window.innerHeight / 2;
-    const offset = (center - viewCenter) / window.innerHeight;
-    const rotateX = offset * -6;
-    const rotateY = offset * 2;
+function calcularProgreso() {
+  return contarVisitados() / TOTAL_PUNTOS;
+}
 
-    scene.classList.add("is-tilted");
-    scene.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+function aplicarVisitadosIndice() {
+  indiceItems.forEach((btn) => {
+    const id = btn.dataset.id;
+    btn.classList.toggle("visitado", id && visitados.has(id));
   });
 }
 
-function setActiveSection(id) {
-  navDots.forEach((dot) => {
-    dot.classList.toggle("active", dot.dataset.section === id);
-  });
-  navLabels.forEach((label) => {
-    label.classList.toggle("active", label.dataset.for === id);
-  });
+function actualizarProgresoUI() {
+  const cuentan = contarVisitados();
+  if (progresoTexto) progresoTexto.textContent = String(cuentan);
+  if (progresoBloque) {
+    progresoBloque.setAttribute("aria-valuenow", String(cuentan));
+    progresoBloque.setAttribute("aria-valuemax", String(TOTAL_PUNTOS));
+  }
+  actualizarPaleta(calcularProgreso());
+  recorrido?.setVisitados(visitados);
 }
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        setActiveSection(entry.target.id);
+function marcarVisitado(id) {
+  if (!PUNTOS_IDS.includes(id)) return;
+  const antes = visitados.size;
+  visitados.add(id);
+  if (visitados.size === antes) return;
+  aplicarVisitadosIndice();
+  actualizarProgresoUI();
+}
+
+function resaltarActivo(id) {
+  activoId = id;
+  indiceItems.forEach((btn) => btn.classList.toggle("activo", btn.dataset.id === id));
+  recorrido?.setActivo(id);
+  recorrido?.enfocarPunto(id);
+}
+
+function enlazarExpandir(contenedor) {
+  contenedor.querySelectorAll(".btn-expand").forEach((btn) => {
+    const etiquetaAbrir = btn.textContent.trim() || "Leer más";
+    const etiquetaCerrar = btn.dataset.etiquetaCerrar || "Ocultar";
+
+    btn.addEventListener("click", () => {
+      const note = btn.nextElementSibling;
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!expanded));
+      btn.textContent = expanded ? etiquetaAbrir : etiquetaCerrar;
+      if (note?.classList.contains("texto-nota")) {
+        note.hidden = expanded;
       }
     });
-  },
-  { threshold: 0.3, rootMargin: "-8% 0px -8% 0px" }
-);
+  });
+}
 
-sections.forEach((section) => observer.observe(section));
+/** Clona el contenido actual del <template> (lee el HTML en cada apertura) */
+function clonarPlantilla(id) {
+  const tpl = document.getElementById(`tpl-${id}`);
+  if (!tpl) return null;
 
-let ticking = false;
-window.addEventListener(
-  "scroll",
-  () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        updateScrollColors();
-        updateSceneTilt();
-        ticking = false;
-      });
-      ticking = true;
+  if (tpl.content?.childNodes?.length) {
+    return document.importNode(tpl.content, true);
+  }
+
+  const envoltorio = document.createElement("div");
+  envoltorio.innerHTML = tpl.innerHTML;
+  const frag = document.createDocumentFragment();
+  while (envoltorio.firstChild) frag.appendChild(envoltorio.firstChild);
+  return frag.childNodes.length ? frag : null;
+}
+
+function abrirLectura(id) {
+  const meta = metaDesdeIndice(id);
+  const contenido = clonarPlantilla(id);
+  if (!contenido || !lectura) return;
+
+  lecturaTitulo.textContent = meta.titulo;
+  lecturaTerritorio.textContent = meta.territorio;
+
+  lecturaCuerpo.replaceChildren(contenido);
+  enlazarExpandir(lecturaCuerpo);
+
+  marcarVisitado(id);
+  resaltarActivo(id);
+
+  if (hintRecorrido) hintRecorrido.hidden = true;
+
+  lectura.hidden = false;
+  lecturaOverlay.hidden = false;
+  lectura.setAttribute("aria-hidden", "false");
+  lecturaOverlay.setAttribute("aria-hidden", "false");
+  requestAnimationFrame(() => {
+    lectura.classList.add("abierta");
+    lecturaOverlay.classList.add("visible");
+    document.body.classList.add("lectura-abierta");
+  });
+}
+
+function cerrarLectura() {
+  lectura?.classList.remove("abierta");
+  lecturaOverlay?.classList.remove("visible");
+  document.body.classList.remove("lectura-abierta");
+
+  const cerrar = () => {
+    if (lectura) {
+      lectura.hidden = true;
+      lectura.setAttribute("aria-hidden", "true");
     }
-  },
-  { passive: true }
-);
+    if (lecturaOverlay) {
+      lecturaOverlay.hidden = true;
+      lecturaOverlay.setAttribute("aria-hidden", "true");
+    }
+    indiceItems.forEach((btn) => btn.classList.remove("activo"));
+    activoId = null;
+    if (recorrido) recorrido.setActivo(null);
+  };
 
-document.querySelector(".btn-scroll")?.addEventListener("click", () => {
-  document.getElementById("texto-1")?.scrollIntoView({ behavior: "smooth" });
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    cerrar();
+    return;
+  }
+
+  setTimeout(cerrar, 380);
+}
+
+function setMapaAbierto(abierto) {
+  if (!mapaPanel || !mapaToggle) return;
+  mapaPanel.classList.toggle("abierto", abierto);
+  mapaToggle.setAttribute("aria-expanded", String(abierto));
+  if (mapaToggleLabel) mapaToggleLabel.textContent = abierto ? "Cerrar" : "Mapa";
+}
+
+mapaToggle?.addEventListener("click", () => {
+  setMapaAbierto(!mapaPanel.classList.contains("abierto"));
 });
 
-document.querySelector(".btn-top")?.addEventListener("click", () => {
-  document.getElementById("inicio")?.scrollIntoView({ behavior: "smooth" });
-});
+function montarTextoUmbral() {
+  const tpl = document.getElementById("tpl-portada");
+  if (!tpl || !umbralTexto) return;
+  umbralTexto.innerHTML = "";
+  umbralTexto.appendChild(tpl.content.cloneNode(true));
+}
 
-document.querySelectorAll(".btn-expand").forEach((btn) => {
+function iniciarRecorrido() {
+  if (recorridoIniciado) return;
+  recorridoIniciado = true;
+
+  document.body.classList.remove("estado-inicio");
+  document.body.classList.add("estado-recorrido");
+
+  if (paginaInicio) {
+    paginaInicio.hidden = true;
+    paginaInicio.setAttribute("aria-hidden", "true");
+  }
+
+  if (contenedor3d) contenedor3d.hidden = false;
+  if (uiCapas) uiCapas.hidden = false;
+
+  if (btnIniciarRecorrido) {
+    btnIniciarRecorrido.disabled = true;
+    btnIniciarRecorrido.textContent = "Cargando mapa…";
+  }
+
+  if (contenedor3d) {
+    recorrido = new Recorrido3D(contenedor3d, {
+      onPuntoClick: (id) => abrirLectura(id),
+      onMarcadoresListos: () => {
+        recorrido?.actualizarEtiquetasMarcadores();
+        actualizarProgresoUI();
+      },
+      etiquetaPunto: (id) => metaDesdeIndice(id).titulo,
+    });
+  }
+
+  actualizarProgresoUI();
+
+  if (mapaPanel && matchMedia("(min-width: 901px)").matches) {
+    setMapaAbierto(true);
+  }
+}
+
+function animarLogoInicio() {
+  if (!inicioSplash || !inicioContenido) {
+    inicioContenido?.classList.remove("inicio-contenido--pendiente");
+    inicioContenido?.classList.add("inicio-contenido--visible");
+    return;
+  }
+
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const esperaLogo = reduceMotion ? 0 : 2000;
+  const duracionFade = reduceMotion ? 0 : 1000;
+
+  window.setTimeout(() => {
+    inicioSplash.classList.add("desvaneciendo");
+    inicioSplash.setAttribute("aria-hidden", "true");
+
+    window.setTimeout(() => {
+      inicioSplash.classList.add("oculto");
+      inicioContenido.classList.remove("inicio-contenido--pendiente");
+      inicioContenido.classList.add("inicio-contenido--visible");
+    }, duracionFade);
+  }, esperaLogo);
+}
+
+montarTextoUmbral();
+actualizarProgresoUI();
+animarLogoInicio();
+btnIniciarRecorrido?.addEventListener("click", iniciarRecorrido);
+
+indiceItems.forEach((btn) => {
   btn.addEventListener("click", () => {
-    const note = btn.nextElementSibling;
-    const expanded = btn.getAttribute("aria-expanded") === "true";
-    btn.setAttribute("aria-expanded", String(!expanded));
-    btn.textContent = expanded ? "Leer análisis" : "Ocultar análisis";
-    if (note?.classList.contains("texto-nota")) {
-      note.hidden = expanded;
-    }
+    abrirLectura(btn.dataset.id);
+    if (matchMedia("(max-width: 900px)").matches) setMapaAbierto(false);
   });
 });
 
-navDots.forEach((dot) => {
-  dot.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.getElementById(dot.dataset.section)?.scrollIntoView({ behavior: "smooth" });
-  });
+btnCerrar?.addEventListener("click", cerrarLectura);
+lecturaOverlay?.addEventListener("click", cerrarLectura);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && activoId) cerrarLectura();
 });
 
-updateScrollColors();
-updateSceneTilt();
-sections[0]?.classList.add("visible");
-setActiveSection("inicio");
+actualizarPaleta(0);

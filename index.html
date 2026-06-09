@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+  <!-- ========== CABECERA DEL DOCUMENTO ========== -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Textos de Fantasía</title>
-    <meta name="description" content="Textos de fantasía — Retórica, cuento sin contar" />
-    <meta name="theme-color" content="#8b0000" />
+    <title>Textos de Fantasía — Recorrido 3D</title>
+    <meta name="description" content="Recorrido 3D por textos de fantasía — Retórica, cuento sin contar" />
+    <meta name="theme-color" content="#05060c" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="./favicon-192.png" sizes="192x192" />
     <meta property="og:title" content="Textos y Transmedia" />
-    <meta property="og:description" content="Textos de recuerdos — Retórica, cuento sin contar" />
+    <meta property="og:description" content="Cartografía narrativa — Retórica, cuento sin contar" />
     <meta property="og:image" content="./miniatura.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="512" />
@@ -18,6 +19,7 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="./miniatura.png" />
+    <!-- URLs absolutas de miniatura para redes sociales -->
     <script>
       (function () {
         var img = new URL("./miniatura.png", location.href).href;
@@ -26,277 +28,334 @@
       })();
     </script>
   </head>
-  <body>
-    <div class="progress-bar" aria-hidden="true"></div>
 
-    <nav class="nav-dots" aria-label="Navegación por textos">
-      <a href="#inicio" class="nav-dot active" data-section="inicio" aria-label="Inicio"></a>
-      <a href="#texto-1" class="nav-dot" data-section="texto-1" aria-label="Texto 1"></a>
-      <a href="#texto-2" class="nav-dot" data-section="texto-2" aria-label="Texto 2"></a>
-      <a href="#texto-3" class="nav-dot" data-section="texto-3" aria-label="Texto 3"></a>
-      <a href="#texto-4" class="nav-dot" data-section="texto-4" aria-label="Texto 4"></a>
-      <a href="#texto-5" class="nav-dot" data-section="texto-5" aria-label="Texto 5"></a>
-      <a href="#texto-6" class="nav-dot" data-section="texto-6" aria-label="Texto 6"></a>
-      <a href="#texto-7" class="nav-dot" data-section="texto-7" aria-label="Texto 7"></a>
-      <a href="#texto-8" class="nav-dot" data-section="texto-8" aria-label="Texto 8"></a>
-    </nav>
+  <body class="estado-inicio">
+    <!-- ========== PÁGINA DE INICIO (portada antes del 3D) ========== -->
+    <section
+      id="pagina-inicio"
+      class="pagina-inicio"
+      aria-labelledby="inicio-titulo"
+    >
+      <!-- Logo animado (2 s + desvanecimiento) -->
+      <div class="inicio-splash" id="inicio-splash" aria-hidden="false">
+        <img
+          class="inicio-logo"
+          src="./miniatura.png"
+          width="120"
+          height="120"
+          alt="Textos de Fantasía"
+        />
+      </div>
 
-    <aside class="nav-labels" aria-hidden="true">
-      <span class="nav-label active" data-for="inicio">Inicio</span>
-      <span class="nav-label" data-for="texto-1">Texto:1</span>
-      <span class="nav-label" data-for="texto-2">Texto:2</span>
-      <span class="nav-label" data-for="texto-3">Texto:3</span>
-      <span class="nav-label" data-for="texto-4">Texto:4</span>
-      <span class="nav-label" data-for="texto-5">Texto:5</span>
-      <span class="nav-label" data-for="texto-6">Texto:6</span>
-      <span class="nav-label" data-for="texto-7">Texto:7</span>
-      <span class="nav-label" data-for="texto-8">Texto:8</span>
+      <!-- Título, texto de portada (tpl-portada) y botón entrar -->
+      <div class="inicio-contenido inicio-contenido--pendiente" id="inicio-contenido-principal">
+        <header class="inicio-marca">
+          <p class="inicio-eyebrow">Retórica · Cuento sin contar</p>
+          <h1 id="inicio-titulo" class="inicio-titulo">Textos de <em>Fantasía</em></h1>
+        </header>
+
+        <!-- Aquí se inserta el contenido de tpl-portada vía tre.js -->
+        <div class="inicio-umbral" id="inicio-umbral-texto"></div>
+
+        <button type="button" class="btn-iniciar" id="btn-iniciar-recorrido">
+          Entrar al recorrido
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== ESCENA 3D (canvas Three.js) ========== -->
+    <div id="recorrido-3d" class="ambiente-3d" aria-label="Ambiente tridimensional" data-carga="" hidden>
+      <!-- Pantalla «Cargando mundo…» (logo + fade, como la portada) -->
+      <div class="recorrido-carga" aria-live="polite" aria-busy="true">
+        <div class="recorrido-carga-inner">
+          <img
+            class="recorrido-carga-logo"
+            src="./miniatura.png"
+            width="120"
+            height="120"
+            alt=""
+          />
+          <p class="recorrido-carga-texto">
+            Cargando mundo…<span class="recorrido-carga-pct"></span>
+          </p>
+        </div>
+      </div>
+      <!-- Ayuda de controles (visible con el mapa cargado) -->
+      <p id="hint-recorrido" class="hint-recorrido">
+        Arrastra para mirar · rueda para acercar · flechas para moverte · clic en un marcador para leer
+      </p>
+    </div>
+
+    <!-- ========== INTERFAZ SOBRE EL 3D (cabecera, índice, progreso) ========== -->
+    <div class="ui-capas" hidden>
+      <!-- Barra superior según fragmentos leídos -->
+      <div class="progress-bar" aria-hidden="true"></div>
+
+      <!-- Título flotante y contador 0/8 -->
+      <header class="carto-cabecera">
+        <p class="eyebrow">Retórica · Recorrido 3D</p>
+        <h1 class="ink-source">Textos de <em>Fantasía</em></h1>
+        <p class="carto-desc">
+          Acércate a un marcador o elígelo en el índice.
+        </p>
+        <p
+          class="carto-progreso"
+          role="status"
+          aria-live="polite"
+          aria-valuenow="0"
+          aria-valuemax="9"
+        >
+          <span id="progreso-texto">0</span> de 9 puntos visitados
+        </p>
+      </header>
+
+      <!-- Panel desplegable: índice de los 9 puntos del recorrido -->
+      <aside class="mapa-panel" id="mapa-panel">
+        <button
+          type="button"
+          class="mapa-toggle"
+          id="mapa-toggle"
+          aria-expanded="false"
+          aria-controls="mapa-indice"
+        >
+          <span class="mapa-toggle-icon" aria-hidden="true">☰</span>
+          <span class="mapa-toggle-label">Mapa</span>
+        </button>
+        <!-- Índice: título = texto del botón. Relato = <template id="tpl-texto-X"> con el mismo X en data-id -->
+        <nav class="mapa-indice" id="mapa-indice" aria-label="Índice del recorrido">
+          <button type="button" class="indice-item" data-id="inicio">Cartografía del recuerdo</button>
+          <button type="button" class="indice-item" data-id="texto-2">La infección no se detiene</button>
+          <button type="button" class="indice-item" data-id="texto-3">El dragón que olvidó su nombre</button>
+          <button type="button" class="indice-item" data-id="texto-4">Las lunas de cristal</button>
+          <button type="button" class="indice-item" data-id="texto-5">El cuento que se niega a terminar</button>
+          <button type="button" class="indice-item" data-id="texto-6">La ciudad que respira al revés</button>
+          <button type="button" class="indice-item" data-id="texto-7">El mapa de las cicatrices</button>
+          <button type="button" class="indice-item" data-id="texto-8">La última palabra del mundo</button>
+          <button type="button" class="indice-item" data-id="texto-1">El marchitar de las flores</button>
+        </nav>
+      </aside>
+    </div>
+
+    <!-- ========== PANEL LATERAL DE LECTURA ========== -->
+    <aside
+      class="lectura"
+      id="lectura"
+      aria-labelledby="lectura-titulo"
+      aria-hidden="true"
+      hidden
+    >
+      <header class="lectura-cabecera">
+        <p class="lectura-territorio" id="lectura-territorio"></p>
+        <h2 class="lectura-titulo ink-source" id="lectura-titulo"></h2>
+        <button type="button" class="btn-cerrar" aria-label="Cerrar lectura">×</button>
+      </header>
+      <div class="lectura-cuerpo" id="lectura-cuerpo"></div>
     </aside>
 
-    <main>
-      <section id="inicio" class="section hero" data-index="0">
-        <div class="hero-content texto-scene">
-          <p class="eyebrow">Retórica · Cuento sin contar</p>
-          <h1 class="ink-source">Textos de <em>Fantasía</em></h1>
-          <p class="hero-desc texto-panel texto-panel--hero">
-            Ocho fragmentos de mí. Recuerdos y sin más.
-          </p>
-          <button type="button" class="btn-scroll" aria-label="Ir al primer texto">
-            <span>Explorar</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M10 4v12M10 16l-4-4M10 16l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <div class="scroll-hint" aria-hidden="true">
-          <span>scroll</span>
-          <div class="scroll-line"></div>
-        </div>
-      </section>
+    <!-- Fondo oscuro al abrir un texto -->
+    <div class="lectura-overlay" id="lectura-overlay" hidden aria-hidden="true"></div>
 
-      <section id="texto-1" class="section texto" data-index="1">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:1</span>
-            <h2>El marchitar de las flores</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p class="drop-cap">
-              Los cuadros me abruman en la niebla, los pies me queman mientras los observo, no tengo a
-              donde más voltear, únicamente me queda seguir avanzando como si no me doliera, las
-              lágrimas del coraje me perforaban los ojos. Lo sé, fue mi culpa, por ello ya no me es
-              permitido emitir ningun sonido, solo me quedan las flores en los cuadros, una y otra vez,
-              incluso si ya me los sé de memoria. Podría huir pero en el fondo lo sé, las lágrimas
-              derramadas, nunca volverán, la niebla nunca se disipara y el arrepentimiento siempre
-              quedará en cada pincelada de aquel oléo. 
-            </p>
-            <p>
-              Intentaría mirar al cielo, sin embargo, ya no me es permitido, sin nada más que cuadros, las
-              flores se van marchitando cuadro a cuadro, pero cuando están a punto de acabarse,
-              retrocedo para que vuelvan a florecer, deseando que algo diferente suceda. Si lo hace,
-              prometo dejar que las flores se mueran y descansen, tal como yo he deseado hacerlo desde
-              hace mucho tiempo, nuevamente se acabó el pasillo, y nuevamente, regreso al inicio.
-            </p>
-            <blockquote>
-              «No temas lo que no ves; teme lo que el bosque te devuelve con tu propia voz.»
-            </blockquote>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> metáfora del umbral como argumento narrativo. La niebla funciona como <em>enthymeme</em> visual: el lector completa lo no dicho.</p>
-          </div>
-        </div>
-      </section>
+    <!-- ========== PLANTILLAS DE TEXTOS (no visibles; las clona tre.js) ========== -->
 
-      <section id="texto-2" class="section texto" data-index="2">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:2</span>
-            <h2>La biblioteca de los espejos</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              En la torre más alta de la ciudad flotante existía una sala circular
-              cuyas paredes eran espejos opacos. Cada libro reflejaba un final distinto
-              del mismo cuento. Los bibliotecarios juraban que los volúmenes no se
-              leían: se <strong>negociaban</strong> con ellos.
-            </p>
-            <p>
-              Un joven escriba llegó buscando la historia de su madre. El espejo le
-              mostró tres versiones: la heroína, la traidora, la que nunca partió.
-              Eligió la que dolía menos, y al cerrar el libro la torre tembló — como
-              si la fantasía protestara por ser domesticada.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> antítesis entre los tres finales. La elección del lector-personaje replica la <em>dispositio</em>: ordenar el relato según el dolor tolerable.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Portada: «Ocho fragmentos de mí…» (solo pantalla de inicio) -->
+    <template id="tpl-portada">
+      <article class="texto-panel texto-panel--hero">
+        <p>
+          Ocho fragmentos de mí, repartidos en este territorio tridimensional. No es cartografía real:
+          es memoria que puedes recorrer caminando con la mirada.
+        </p>
+        <p>
+          Acércate a cada marcador rojo en el mapa o elígelo en el índice. El mundo te rodea mientras lees.
+        </p>
+      </article>
+    </template>
 
-      <section id="texto-3" class="section texto" data-index="3">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:3</span>
-            <h2>El dragón que olvidó su nombre</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              Dormía enrollado alrededor de una montaña de relojes detenidos. Los
-              campesinos dejaban ofrendas de palabras: poemas, juramentos, mentiras
-              piadosas. El dragón las absorbía y las devolvía transformadas en sueños.
-            </p>
-            <p>
-              Un caballero sin armadura subió a pedirle un favor. —¿Quién eres? —preguntó
-              la bestia. —No lo sé —respondió él—; me quitaron el nombre en la frontera
-              del reino. El dragón rió con un trueno suave: —Entonces somos iguales.
-              Nombrémonos juntos, y que el cuento decida si sobrevivimos.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> paralelismo entre caballero y dragón. La pérdida del nombre es <em>aporia</em> que abre el discurso fantástico hacia lo colaborativo.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Centro del mapa: cartografía del recuerdo (índice + marcador central) -->
+    <template id="tpl-inicio">
+      <article class="texto-panel texto-panel--hero">
+        <p>
+          Este índice no ordena capítulos: traza una ruta. Cada punto cardinal guarda un fragmento;
+          el centro es donde la mirada aprende a orientarse antes de adentrarse en la niebla.
+        </p>
+        <p>
+          Camina el mapa con la rueda y las flechas, o abre aquí cada territorio cuando prefieras leer
+          sin desplazarte. Los marcadores leídos se volverán verdes; los pendientes, rojos.
+        </p>
+      </article>
+    </template>
 
-      <section id="texto-4" class="section texto" data-index="4">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:4</span>
-            <h2>Las lunas de cristal</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              Aquel mundo tenía siete lunas, cada una de un tono de gris diferente.
-              Cuando todas se alineaban, el mar se volvía espejo y los barcos navegaban
-              hacia abajo, buscando el cielo que se había hundido.
-            </p>
-            <p>
-              La narradora contaba esto sin prisa, como quien cuenta un secreto que ya
-              no es suyo. Decía que la fantasía no inventa mundos: los recuerda. Y que
-              cada lector trae una luna que el texto no menciona, pero sin la cual la
-              historia se queda a medias.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> hipérbole (siete lunas) y personificación del mar. La paleta cromática del relato anticipa la escala visual de esta página.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Fragmento 1 · NO — El marchitar de las flores -->
+    <template id="tpl-texto-1">
+      <article class="texto-panel">
+        <p class="drop-cap">
+          Los cuadros me abruman en la niebla, los pies me queman mientras los observo, no tengo a
+          donde más voltear, únicamente me queda seguir avanzando como si no me doliera, las
+          lágrimas del coraje me perforaban los ojos. Lo sé, fue mi culpa, por ello ya no me es
+          permitido emitir ningun sonido, solo me quedan las flores en los cuadros, una y otra vez,
+          incluso si ya me los sé de memoria. Podría huir pero en el fondo lo sé, las lágrimas
+          derramadas, nunca volverán, la niebla nunca se disipara y el arrepentimiento siempre
+          quedará en cada pincelada de aquel oléo.
+        </p>
+        <p>
+          Intentaría mirar al cielo, sin embargo, ya no me es permitido, sin nada más que cuadros, las
+          flores se van marchitando cuadro a cuadro, pero cuando están a punto de acabarse,
+          retrocedo para que vuelvan a florecer, deseando que algo diferente suceda. Si lo hace,
+          prometo dejar que las flores se mueran y descansen, tal como yo he deseado hacerlo desde
+          hace mucho tiempo, nuevamente se acabó el pasillo, y nuevamente, regreso al inicio.
+        </p>
+        <blockquote>
+          «No temas lo que no ves; teme lo que el bosque te devuelve con tu propia voz.»
+        </blockquote>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p><strong>Recuerdo</strong> Fotografías tomadas por mí en la secundaria/preparatoria. <em>Las tomaba</em> en los días que me sentía mal y necesitaba tener esperanza.</p>
+      </div>
+    </template>
 
-      <section id="texto-5" class="section texto" data-index="5">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:5</span>
-            <h2>El cuento que se niega a terminar</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              Al final del manuscrito solo había una línea en blanco y un margen
-              anotado: «continúa tú». Los copistas del monasterio discutían si era
-              herejía o invitación. El abad ordenó cerrar el libro; esa noche, las
-              velas escribieron solas en la pared lo que faltaba.
-            </p>
-            <p>
-              Nadie volvió a leerlo en voz alta. Pero se susurra que el manuscrito
-              aún respira en otras salas del monasterio, esperando manos que no
-              tengan miedo de seguir escribiendo en el margen.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> apóstrofe al lector («continúa tú»). El blanco del margen funciona como <em>paralipsis</em>: lo omitido convoca al lector a completar el argumento.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Fragmento 2 · La infección no se detiene -->
+    <template id="tpl-texto-2">
+      <article class="texto-panel">
+        <p>
+          Nunca me había imaginado cómo se sentiría si te cortaran la piel, perforaran tus pulmones y 
+          succionaran toda la esperanza de volver a comenzar. Tengo tantas desilusiones que me
+          aferré a que siempre sería la última; ahora no recuerdo cuándo mi dignidad me detuvo de
+          hacer alguna tontería. Incluso sé que lo volvería a hacer, tropezar con la misma piedra,
+          siempre que la piedra brille; puedo volver a hacerme ciega y puedo volver a que no me
+          importe qué tan afilado esté el hierro; sigo tratando, sigo aquí.
+        </p>
+        <p>
+          Sé que me lo provoqué, yo quise que pasara; es como si no aceptara que necesito la
+          adrenalina para vivir, para sentir. Si me duele, quiere decir que no estoy completamente
+          insensibilizada; por ello dejo que el cuchillo me atraviese. Fui yo quien lo enterró, fui yo
+          quien, al sanar, volvió a provocar la infección, fui yo. Me pregunto si esta vez dolerá más, si
+          esta vez acabará conmigo, si podré soportar más el dolor. Quisiera que así fuera, quisiera
+          que doliera más, pero por alguna razón, se empieza a expandir, ya no soy solo yo, son los
+          demás, me empiezan a consumir, comienzan a ser parte de mi infección.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Recuerdo</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Cuando me hice mi primer piercing se me infectó, estuve un mes y medio con la infección, espere un año y volví a hacer el mismo</p>
+      </div>
+    </template>
 
-      <section id="texto-6" class="section texto" data-index="6">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:6</span>
-            <h2>La ciudad que respira al revés</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              Allí el alba llegaba por los desagües y el ocaso subía por las chimeneas.
-              Los relojes marcaban el tiempo que faltaba, no el que pasaba. Los habitantes
-              aprendieron a saludar de espaldas: era la única forma de no mentir al decir
-              adiós.
-            </p>
-            <p>
-              Una cartógrafa trazó el mapa al contrario y descubrió que las calles formaban
-              una frase. La leyó en voz baja; la ciudad exhaló, satisfecha, y por un instante
-              el cielo quedó abajo y el mar arriba — como si la fantasía corrigiera la gravedad
-              del sentido común.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> hipérbole espacial y quiasmus (cielo abajo / mar arriba). La ciudad invertida es <em>topos</em> del mundo al revés que argumenta contra lo dado.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Fragmento 3 · NE — El dragón que olvidó su nombre -->
+    <template id="tpl-texto-3">
+      <article class="texto-panel">
+        <p>
+          Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas
+          malesuada. Praesent congue erat at massa. Sed cursus turpis vitae tortor. Donec posuere
+          vulputate arcu.
+        </p>
+        <p>
+          Phasellus accumsan cursus velit. Vestibulum ante ipsum primis in faucibus orci luctus et
+          ultrices posuere cubilia curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod
+          orci, ac placerat dolor lectus quis orci.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Nulla facilisi. Aenean nec eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+      </div>
+    </template>
 
-      <section id="texto-7" class="section texto" data-index="7">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:7</span>
-            <h2>El mapa de las cicatrices</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              Cada guerra dejó una línea en el pergamino. No eran fronteras: eran memorias
-              que sangraban tinta roja oscura y se secaban en marrón. Los heraldos juraban
-              que el mapa latía cuando alguien mentía sobre la paz.
-            </p>
-            <p>
-              Una niña tocó la cicatriz más antigua y escuchó un nombre que no era el suyo.
-              Lo repitió; el mapa respondió con otra voz, más joven. Así entendió que las
-              heridas también narran, y que callarlas es borrar un capítulo entero del reino.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> prosopopeya del mapa y metonimia (cicatriz por batalla). El cuerpo del territorio persuade sin arenga: muestra la costura del dolor.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Fragmento 4 · E — Las lunas de cristal -->
+    <template id="tpl-texto-4">
+      <article class="texto-panel">
+        <p>
+          Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et
+          ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
+        </p>
+        <p>
+          Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet
+          nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit
+          cursus nunc.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.</p>
+      </div>
+    </template>
 
-      <section id="texto-8" class="section texto" data-index="8">
-        <div class="texto-scene">
-          <header class="texto-header ink-source">
-            <span class="texto-num">Texto:8</span>
-            <h2>La última palabra del mundo</h2>
-          </header>
-          <article class="texto-body texto-panel">
-            <p>
-              Decían que al final de todas las lenguas había una sola sílaba que aún no se
-              había pronunciado. Los profetas discutían su timbre; los músicos, su duración.
-              Solo una anciana afirmaba que ya la conocían los que callan antes de dormir.
-            </p>
-            <p>
-              Cuando por fin alguien la dijo, no hubo trueno ni silencio absoluto: solo el
-              murmullo de ocho cuentos encajando como piezas de un mismo reloj. Quien llega
-              hasta aquí —hasta el último texto, hasta el negro más profundo— ya ha
-              completado el cuento. La fantasía, al fin, es un pacto entre quien escribe
-              y quien permanece leyendo.
-            </p>
-          </article>
-          <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
-          <div class="texto-nota texto-panel" hidden>
-            <p><strong>Figura retórica:</strong> epífora y cierre circular. La «última palabra» remite a los ocho textos como <em>dispositio</em> global del recorrido.</p>
-          </div>
-          <footer class="section-footer">
-            <p>Fin del recorrido</p>
-            <button type="button" class="btn-top" aria-label="Volver al inicio">↑ Inicio</button>
-          </footer>
-        </div>
-      </section>
-    </main>
+    <!-- Fragmento 5 · SE — El cuento que se niega a terminar -->
+    <template id="tpl-texto-5">
+      <article class="texto-panel">
+        <p>
+          Fusce vulputate eleifend sapien. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy
+          id, metus. Nullam accumsan lorem in dui. Cras ultricies mi eu turpis hendrerit fringilla.
+        </p>
+        <p>
+          Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing
+          sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+      </div>
+    </template>
 
+    <!-- Fragmento 6 · S — La ciudad que respira al revés -->
+    <template id="tpl-texto-6">
+      <article class="texto-panel">
+        <p>
+          Proin magna. Duis vel odio morbi augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+          Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero.
+        </p>
+        <p>
+          Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante,
+          dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Donec pede justo, fringilla vel.</p>
+      </div>
+    </template>
+
+    <!-- Fragmento 7 · SO — El mapa de las cicatrices -->
+    <template id="tpl-texto-7">
+      <article class="texto-panel">
+        <p>
+          In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede
+          mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.
+        </p>
+        <p>
+          Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend
+          ac, enim. Aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris.</p>
+      </div>
+    </template>
+
+    <!-- Fragmento 8 · O — La última palabra del mundo (cierre del recorrido) -->
+    <template id="tpl-texto-8">
+      <article class="texto-panel">
+        <p>
+          Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa
+          mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci
+          luctus et ultrices posuere cubilia curae.
+        </p>
+        <p>
+          Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a,
+          ultricies in, diam. Sed arcu. Cras consequat. Praesent dapibus, neque id cursus faucibus.
+        </p>
+      </article>
+      <button type="button" class="btn-expand" aria-expanded="false">Leer análisis</button>
+      <div class="texto-nota texto-panel" hidden>
+        <p>Fusce ac felis sit amet ligula pharetra condimentum. Maecenas egestas arcu quis ligula mattis placerat.</p>
+      </div>
+      <footer class="lectura-pie">
+        <p>Fin del recorrido cartográfico</p>
+      </footer>
+    </template>
+
+    <!-- Lógica: portada, 3D, lectura, progreso (tre.js + recorrido-3d.js) -->
     <script type="module" src="./tre.js"></script>
   </body>
 </html>
